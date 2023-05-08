@@ -111,9 +111,9 @@ php -S 127.0.0.1:"$puerto_local" > /dev/null 2>&1 &
 sleep 2
 printf "\e[1;92m[\e[0m+\e[1;92m] Starting ngrok server...\n"
 ./ngrok http "$puerto_local" > ngrok.log 2>&1 &
-sleep 10
-ngrokif=$(cat ngrok.log)
-echo "info: " $ngrokif
+sleep 5
+
+cat ngrok.log
 
 # Obtener la URL de Ngrok
 ngrok_info=$(curl -s http://localhost:4040/api/tunnels)
@@ -121,6 +121,8 @@ ngrok_url=$(echo "$ngrok_info" | jq -r '.tunnels[0].public_url')
 
 echo "El enlace de Ngrok es: $ngrok_url"
 
+# Mostrar el contenido del archivo ngrok.log
+cat ngrok.log
 
 payload_ngrok
 checkfound
